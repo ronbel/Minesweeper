@@ -1,16 +1,17 @@
 
 //Game setting parameters//
-
+let SIDE_LEN=20; //The length of a side of a cell//
+let DEFAULT_ROWS=20, DEFAULT_COLS=20, DEFAULT_MINE=81;
 let grid;
 let rows=20,cols=20,mine=81; //Default values//
 
 //Game state variables//
 let gameOver=false;
-let remainingMines;
-let hiddenCells;
+let remainingMines=0;
+let hiddenCells=0; //Refers only to non-mined cells//
 
 //HTML variables//
-let canvas, context;
+let canvas=null, context=null;
 let rem_text=document.getElementById('rem_text');
 
 let mine_icon=new Image();
@@ -71,40 +72,43 @@ function revealCell(x,y)
              alert('You lost!');
              }
         else if(grid[x][y].number==0){
-            for(let i=x-1;i<x+2;i++){
-                if(i>=0 && i<rows){
-                for(let j=y-1;j<y+2;j++){
-                    if(j>=0 && j<cols) {
-                            revealCell(i,j);
-                        }
-        
-                    }
-                }
-            }
-           
+            revealSurrounding(x,y);
         }
-
     }
 }
+
+function revealSurrounding(x,y){
+    for(let i=x-1;i<x+2;i++){
+        if(i>=0 && i<rows){
+        for(let j=y-1;j<y+2;j++){
+            if(j>=0 && j<cols) {
+                    revealCell(i,j);
+                }
+
+            }
+        }
+    }
+}
+
 function showCell(x,y){
     context.fillStyle='white';
-    context.fillRect(x*20+1,y*20+1,18,18);
+    context.fillRect(x*SIDE_LEN+1,y*SIDE_LEN+1,18,18);
     context.fillStyle='black';
     if(grid[x][y].number>0){
-        context.fillText(String(grid[x][y].number),x*20+2,(y+1)*20-2);
+        context.fillText(String(grid[x][y].number),x*SIDE_LEN+2,(y+1)*SIDE_LEN-2);
     }
     else if(grid[x][y].mined){
-        context.drawImage(mine_icon,x*20+1,y*20+1);
+        context.drawImage(mine_icon,x*SIDE_LEN+1,y*SIDE_LEN+1);
     }
 }
 
 function showFlag(x,y){
     context.fillStyle='grey';
     if(grid[x][y].flagged){
-        context.drawImage(flag_icon,x*20+1,y*20+1);
+        context.drawImage(flag_icon,x*SIDE_LEN+1,y*SIDE_LEN+1);
     }
     else{
-    context.fillRect(x*20+1,y*20+1,18,18);
+    context.fillRect(x*SIDE_LEN+1,y*SIDE_LEN+1,18,18);
     }
 }
 
@@ -123,8 +127,8 @@ function flagCell(x,y){
 function getMouseCell(canvas, evt) {
     let rect = canvas.getBoundingClientRect();
     return {
-      x: Math.floor((evt.clientX - rect.left)/20),
-      y: Math.floor((evt.clientY - rect.top)/20)
+      x: Math.floor((evt.clientX - rect.left)/SIDE_LEN),
+      y: Math.floor((evt.clientY - rect.top)/SIDE_LEN)
     };
 }
 
@@ -198,8 +202,8 @@ function drawCanvas(h,w){
 
     context=canvas.getContext('2d');
 
-    for(x=0;x<=w;x+=20){
-        for(y=0;y<=h;y+=20){
+    for(x=0;x<=w;x+=SIDE_LEN){
+        for(y=0;y<=h;y+=SIDE_LEN){
            
             context.moveTo(x,0);
             context.lineTo(x,h);
@@ -219,13 +223,7 @@ function drawCanvas(h,w){
          if(!grid[pos.x][pos.y].revealed && !grid[pos.x][pos.y].flagged && !gameOver){
                   revealCell(pos.x,pos.y);
                   if(hiddenCells==0){
-                      for(i=0;i<rows;i++){
-                          for(j=0;j<cols;j++){
-                              if(grid[i][j].mined){
-                                  flagCell(i,j);
-                              }
-                          }
-                      }
+                    flagRemainingCells();
                     gameOver=true;
                     alert('You won!');
                 }
@@ -243,10 +241,23 @@ function drawCanvas(h,w){
 
 }
 
+function flagRemainingCells(){
+    for(i=0;i<rows;i++){
+        for(j=0;j<cols;j++){
+            if(grid[i][j].mined && !grid[i][j].flagged){
+                flagCell(i,j);
+            }
+        }
+    }
+}
+
 
 function setupGame()
 {
-    drawCanvas(cols*20,rows*20);
+    rows=localStorage.getItem('rows')===null?DEFAULT_ROWS:localStorage.getItem('rows');
+    cols=localStorage.getItem('cols')===null?DEFAULT_COLS:localStorage.getItem('cols');
+    mine=localStorage.getItem('mine')===null?DEFAULT_MINE:localStorage.getItem('mine');
+    drawCanvas(cols*SIDE_LEN,rows*SIDE_LEN);
     grid=makeNewGrid();
     selectMineCells();
     fillNumbers();
@@ -255,3 +266,9 @@ function setupGame()
     hiddenCells=rows*cols-mine;
     updateRemText();
 }
+
+
+
+document.getElementById('settings_button').addEventListener('click',function(){
+    window.location='settings.html';
+});
