@@ -4,16 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="Images/mine_icon.png"></link>
     <title>Minesweeper Settings</title>
 </head>
 <body>
     <h1>Minesweeper Settings</h1>
-    Rows (Max. 50): <input id="row_setting" type="number"></input><br>
-    Columns (Max. 50):<input type="number" id="col_setting"></input><br>
+    Rows (Max. 30): <input id="row_setting" type="number"></input><br>
+    Columns (Max. 30):<input type="number" id="col_setting"></input><br>
     Mines (Min. 1): <input type="number" id="mine_setting"></input><br>
 
     <button id="apply_button">Apply</button>
     <button id="back_button">Back</button>
+    <button id="default_button" onclick="restoreDefault()">Restore Default</button>
     <script src="settings.js"></script>
     
 </body>
