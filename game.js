@@ -162,10 +162,10 @@ function setupGame()
     rows=localStorage.getItem('rows')===null?DEFAULT_ROWS:localStorage.getItem('rows');
     cols=localStorage.getItem('cols')===null?DEFAULT_COLS:localStorage.getItem('cols');
     mine=localStorage.getItem('mine')===null?DEFAULT_MINE:localStorage.getItem('mine');
-    if(canvas==null){
-        drawCanvas(cols*SIDE_LEN,rows*SIDE_LEN);}
-    else{
-        cleanBoard();}
+    if(canvas==null)
+        drawCanvas(cols*SIDE_LEN,rows*SIDE_LEN);
+    else
+         cleanBoard();
     grid=makeNewGrid();
     selectMineCells();
     fillNumbers();

@@ -28,8 +28,8 @@ function restoreDefault(){
 
 
 function checkConditions(){
-    return row_setting.value>0 && row_setting.value<=30 && 
-    col_setting.value>0 && col_setting.value<=30 &&
+    return row_setting.value>0 && row_setting.value<=25 && 
+    col_setting.value>0 && col_setting.value<=22 &&
     mine_setting.value<col_setting.value*row_setting.value &&
     mine_setting.value>0;
 }
@@ -43,9 +43,9 @@ apply_button.addEventListener('click',function(){
         setInputs();
     }
     else{
-    localStorage.setItem('rows',row_setting.value);
-    localStorage.setItem('cols',col_setting.value);
-    localStorage.setItem('mine',mine_setting.value);
+    localStorage.setItem('rows',Math.floor(row_setting.value));
+    localStorage.setItem('cols',Math.floor(col_setting.value));
+    localStorage.setItem('mine',Math.floor(mine_setting.value));
     window.location='index.html';
     }
         

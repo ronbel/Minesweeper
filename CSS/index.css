@@ -1,0 +1,27 @@
+body{
+    text-align:center;
+}
+
+#rem_text{
+    padding-left:2em;
+    padding-right:2em;
+}
+
+
+canvas{
+    position: relative;
+    top:20px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin:auto;
+}
+
+footer{
+   
+   position:absolute;
+   top:90%;
+   left:45%;
+   text-align:center;
+
+}

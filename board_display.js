@@ -51,6 +51,7 @@ function drawCanvas(h,w){
         }
         
     });
+    
 }
 
 function getMouseCell(canvas, evt) {
